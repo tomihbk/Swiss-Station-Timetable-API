@@ -45,6 +45,9 @@ const requestBodyModel = {
                                         "ojp:StopEventType": [
                                             "departure"
                                         ],
+                                        "ojp:IncludePreviousCalls": [
+                                            "true"
+                                        ],
                                         "ojp:IncludeRealtimeData": [
                                             "true"
                                         ]

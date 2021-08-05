@@ -22,4 +22,7 @@ export class TransportBodyRequestDto {
 
     @IsNotEmpty()
     EnableRealTimeData: string;
+
+    @IsNotEmpty()
+    IncludePreviousCalls: string;
 }

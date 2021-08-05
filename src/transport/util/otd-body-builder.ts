@@ -33,6 +33,9 @@ export class OTDXmlBody {
         // Sets if the request is for departure or arrival from a certain stop
         serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Params'][0]['ojp:StopEventType'][0] = this.body.ArrivalOrDepature
 
+        // Sets if previous station data should be included
+        serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Params'][0]["ojp:IncludePreviousCalls"][0] = this.body.IncludePreviousCalls
+
         // Sets if real time data should be included
         serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Params'][0]["ojp:IncludeRealtimeData"][0] = this.body.EnableRealTimeData
 
