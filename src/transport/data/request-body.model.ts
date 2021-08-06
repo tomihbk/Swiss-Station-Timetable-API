@@ -48,6 +48,9 @@ const requestBodyModel = {
                                         "ojp:IncludePreviousCalls": [
                                             "true"
                                         ],
+                                        "ojp:IncludeOnwardCalls": [
+                                            "true"
+                                        ],
                                         "ojp:IncludeRealtimeData": [
                                             "true"
                                         ]

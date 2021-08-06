@@ -25,4 +25,7 @@ export class TransportBodyRequestDto {
 
     @IsNotEmpty()
     IncludePreviousCalls: string;
+
+    @IsNotEmpty()
+    IncludeOnwardCalls: string
 }
