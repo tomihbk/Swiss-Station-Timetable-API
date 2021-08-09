@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { TransportBodyRequestDto } from './dto/transport.dto';
 import axios, { AxiosResponse } from 'axios';
@@ -22,7 +22,11 @@ export class TransportService {
                 },
                 data: xmlData
             })
-            return new XmlToJsonResponse(this.response.data, this.isItDeparture).convertXmlToJson();
+            if (!this.response.data.includes("STOPEVENT_NOEVENTFOUND")) {
+                return new XmlToJsonResponse(this.response.data, this.isItDeparture).convertXmlToJson();
+            } else {
+                throw new NotFoundException()
+            }
         } catch (err) {
             this.logger.error(err)
             return err
