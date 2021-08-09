@@ -9,6 +9,8 @@ export class XmlToJsonResponse {
     private depatureEstimatedAvailable: boolean
     private originPreviousArrivalEstimatedAvailable: boolean
     private originPreviousDepatureEstimatedAvailable: boolean
+    private originOnwardArrivalEstimatedAvailable: boolean
+    private originOnwardDepatureEstimatedAvailable: boolean
 
     constructor(resXml: string, isItDeparture: boolean) {
         this.responseXml = resXml
@@ -36,6 +38,10 @@ export class XmlToJsonResponse {
 
                 const PreviousCall = val["ojp:StopEvent"][0].hasOwnProperty("ojp:PreviousCall") ? val["ojp:StopEvent"][0]["ojp:PreviousCall"][0]["ojp:CallAtStop"][0] : undefined
 
+                const lastOnwardCall = val["ojp:StopEvent"][0].hasOwnProperty("ojp:OnwardCall") ? Object.keys(val["ojp:StopEvent"][0]["ojp:OnwardCall"]).length - 1 : 0
+
+                const OnwardCall = val["ojp:StopEvent"][0].hasOwnProperty("ojp:OnwardCall") ? val["ojp:StopEvent"][0]["ojp:OnwardCall"][lastOnwardCall]["ojp:CallAtStop"][0] : undefined
+
                 const StopEventService = val["ojp:StopEvent"][0]["ojp:Service"]
 
                 this.depatureEstimatedAvailable = CallAtStop.hasOwnProperty("ojp:ServiceDeparture") && CallAtStop["ojp:ServiceDeparture"][0].hasOwnProperty("ojp:EstimatedTime")
@@ -46,8 +52,13 @@ export class XmlToJsonResponse {
 
                 this.originPreviousArrivalEstimatedAvailable = PreviousCall != undefined && PreviousCall.hasOwnProperty("ojp:ServiceArrival") && PreviousCall["ojp:ServiceArrival"][0].hasOwnProperty("ojp:EstimatedTime")
 
+                this.originOnwardDepatureEstimatedAvailable = OnwardCall != undefined && OnwardCall.hasOwnProperty("ojp:ServiceDeparture") && OnwardCall["ojp:ServiceDeparture"][0].hasOwnProperty("ojp:EstimatedTime")
+
+                this.originOnwardArrivalEstimatedAvailable = OnwardCall != undefined && OnwardCall.hasOwnProperty("ojp:ServiceArrival") && OnwardCall["ojp:ServiceArrival"][0].hasOwnProperty("ojp:EstimatedTime")
+
                 this.responseJson.push({
                     "result": {
+                        "Id": val["ojp:ResultId"][0],
                         "StopEventResponseContext": {
                             "location": {
                                 "id": StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceRef"][0],
@@ -58,27 +69,29 @@ export class XmlToJsonResponse {
                                 }
                             }
                         },
-                        "id": val["ojp:ResultId"][0],
-                        "StartPointRef": CallAtStop["siri:StopPointRef"][0],
-                        "StartPoint": CallAtStop["ojp:StopPointName"][0]["ojp:Text"][0],
-                        "PlannedPlatform": CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._,
-                        "ServiceDeparture": {
-                            "TimetabledTime": this.isItDeparture ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:TimetabledTime"][0] : undefined,
-                            "EstimatedTime": this.isItDeparture && this.depatureEstimatedAvailable ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:EstimatedTime"][0] : undefined
-                        },
-                        "ServiceArrival": {
-                            "TimetabledTime": !this.isItDeparture ? CallAtStop["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
-                            "EstimatedTime": !this.isItDeparture && this.arrivalEstimatedAvailable ? CallAtStop["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
-                        },
-                        "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
-                        "TransportMethod": {
-                            "PtMode": StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0],
-                            "RailSubMode": StopEventService[0]["ojp:Mode"][0]["siri:RailSubmode"][0],
-                            "TransportName": StopEventService[0]["ojp:Mode"][0]["ojp:Name"][0]["ojp:Text"][0]._,
-                            "TransportShortName": StopEventService[0]["ojp:Mode"][0]["ojp:ShortName"][0]["ojp:Text"][0]._,
+                        "RequestedStation": {
+                            "StartPointRef": CallAtStop["siri:StopPointRef"][0],
+                            "StartPoint": CallAtStop["ojp:StopPointName"][0]["ojp:Text"][0],
+                            "ServiceDeparture": {
+                                "TimetabledTime": this.isItDeparture ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:TimetabledTime"][0] : undefined,
+                                "EstimatedTime": this.isItDeparture && this.depatureEstimatedAvailable ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:EstimatedTime"][0] : undefined
+                            },
+                            "ServiceArrival": {
+                                "TimetabledTime": !this.isItDeparture ? CallAtStop["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
+                                "EstimatedTime": !this.isItDeparture && this.arrivalEstimatedAvailable ? CallAtStop["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
+                            },
+                            "PlannedPlatform": CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._,
+                            "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
+                            "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0],
+                            "TransportMethod": {
+                                "PtMode": StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0],
+                                "RailSubMode": StopEventService[0]["ojp:Mode"][0]["siri:RailSubmode"][0],
+                                "TransportName": StopEventService[0]["ojp:Mode"][0]["ojp:Name"][0]["ojp:Text"][0]._,
+                                "TransportShortName": StopEventService[0]["ojp:Mode"][0]["ojp:ShortName"][0]["ojp:Text"][0]._
+                            }
                         },
                         "Origin": {
-                            "isAvailable": val["ojp:StopEvent"][0].hasOwnProperty("ojp:PreviousCall"),
+                            "IsAvailable": val["ojp:StopEvent"][0].hasOwnProperty("ojp:PreviousCall"),
                             "PointRef": PreviousCall ? PreviousCall["siri:StopPointRef"][0] : undefined,
                             "PointName": PreviousCall ? PreviousCall["ojp:StopPointName"][0]["ojp:Text"][0] : undefined,
                             "ServiceDeparture": {
@@ -88,11 +101,20 @@ export class XmlToJsonResponse {
                             "ServiceArrival": {
                                 "TimetabledTime": PreviousCall && PreviousCall.hasOwnProperty("ojp:ServiceArrival") ? PreviousCall["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
                                 "EstimatedTime": this.originPreviousArrivalEstimatedAvailable ? PreviousCall["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
-                            },
+                            }
                         },
-                        "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0],
-                        "EndPointRef": StopEventService[0]["ojp:DestinationStopPointRef"][0],
-                        "EndPointName": StopEventService[0]["ojp:DestinationText"][0]["ojp:Text"][0]._
+                        "Destination": {
+                            "EndPointRef": StopEventService[0]["ojp:DestinationStopPointRef"][0],
+                            "EndPointName": StopEventService[0]["ojp:DestinationText"][0]["ojp:Text"][0]._,
+                            "ServiceDeparture": {
+                                "TimetabledTime": OnwardCall && OnwardCall.hasOwnProperty("ojp:ServiceDeparture") ? OnwardCall["ojp:ServiceDeparture"][0]["ojp:TimetabledTime"][0] : undefined,
+                                "EstimatedTime": this.originOnwardDepatureEstimatedAvailable ? OnwardCall["ojp:ServiceDeparture"][0]["ojp:EstimatedTime"][0] : undefined
+                            },
+                            "ServiceArrival": {
+                                "TimetabledTime": OnwardCall && OnwardCall.hasOwnProperty("ojp:ServiceArrival") ? OnwardCall["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
+                                "EstimatedTime": this.originOnwardArrivalEstimatedAvailable ? OnwardCall["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
+                            }
+                        }
                     }
                 })
             }
