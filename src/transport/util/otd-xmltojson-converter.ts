@@ -56,6 +56,10 @@ export class XmlToJsonResponse {
 
                 this.originOnwardArrivalEstimatedAvailable = OnwardCall != undefined && OnwardCall.hasOwnProperty("ojp:ServiceArrival") && OnwardCall["ojp:ServiceArrival"][0].hasOwnProperty("ojp:EstimatedTime")
 
+                // PtMode(modes of transport) exist in multiple forms, instead of defining an entry for each transport type
+                // I simply concat the name while maintaing 1 simple entry
+                const transportSubMode = `siri:${this.capitalize(StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0])}Submode`
+
                 this.responseJson.push({
                     "result": {
                         "Id": val["ojp:ResultId"][0],
@@ -80,12 +84,12 @@ export class XmlToJsonResponse {
                                 "TimetabledTime": !this.isItDeparture ? CallAtStop["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
                                 "EstimatedTime": !this.isItDeparture && this.arrivalEstimatedAvailable ? CallAtStop["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
                             },
-                            "PlannedPlatform": CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._,
+                            "PlannedPlatform": CallAtStop.hasOwnProperty("ojp:PlannedQuay") ? CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._ : undefined,
                             "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
                             "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0],
                             "TransportMethod": {
                                 "PtMode": StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0],
-                                "RailSubMode": StopEventService[0]["ojp:Mode"][0]["siri:RailSubmode"][0],
+                                "SubMode": StopEventService[0]["ojp:Mode"][0][transportSubMode][0],
                                 "TransportName": StopEventService[0]["ojp:Mode"][0]["ojp:Name"][0]["ojp:Text"][0]._,
                                 "TransportShortName": StopEventService[0]["ojp:Mode"][0]["ojp:ShortName"][0]["ojp:Text"][0]._
                             }
@@ -119,8 +123,10 @@ export class XmlToJsonResponse {
                 })
             }
         });
-
         return this.responseJson
     }
 
+    capitalize(word: string) {
+        return word[0].toUpperCase() + word.slice(1);
+    }
 }
