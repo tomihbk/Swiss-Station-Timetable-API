@@ -65,8 +65,8 @@ export class XmlToJsonResponse {
                         "Id": val["ojp:ResultId"][0],
                         "StopEventResponseContext": {
                             "location": {
-                                "id": StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceRef"][0],
-                                "name": StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceName"][0]["ojp:Text"][0],
+                                "id": StopEventResponseContextLocation["ojp:StopPoint"][0]["siri:StopPointRef"][0],
+                                "name": StopEventResponseContextLocation["ojp:StopPoint"][0]["ojp:StopPointName"][0]["ojp:Text"][0],
                                 "GeoLocation": {
                                     "latitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Latitude"][0],
                                     "longitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Longitude"][0]

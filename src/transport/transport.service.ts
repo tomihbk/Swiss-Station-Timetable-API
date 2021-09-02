@@ -3,7 +3,7 @@ import { Logger } from 'nestjs-pino';
 import { TransportBodyRequestDto } from './dto/transport.dto';
 import axios, { AxiosResponse } from 'axios';
 import { OTDXmlBody } from './util/otd-body-builder';
-import { XmlToJsonResponse } from './util/otd-xmltojson-converter'
+import { XmlToJsonResponse } from './util/otd-xmltojson-parser'
 
 @Injectable()
 export class TransportService {
