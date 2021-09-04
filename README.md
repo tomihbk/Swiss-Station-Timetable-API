@@ -16,7 +16,7 @@ Create an ``.env`` file at the root of your project with the following.
 OPEN_TRANSPORT_DATA_API_URL = https://api.opentransportdata.swiss/ojp2020
 OPEN_TRANSPORT_DATA_API_TOKEN = TOKEN_GENERATED_FROM(https://opentransportdata.swiss/en/dev-dashboard/)
 API_VERSION = API_VERSION(v1)
-APP_PORT = API_PORT_FOR_DEVELOPMENT
+APP_PORT = APP_PORT_FOR_DEVELOPMENT
 ```
 
 An example file `.env.example` is included.
