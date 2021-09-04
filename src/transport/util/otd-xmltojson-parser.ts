@@ -71,7 +71,8 @@ export class XmlToJsonResponse {
                                     "latitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Latitude"][0],
                                     "longitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Longitude"][0]
                                 }
-                            }
+                            },
+                            "IsItDeparture": this.isItDeparture
                         },
                         "RequestedStation": {
                             "StartPointRef": CallAtStop["siri:StopPointRef"][0],
