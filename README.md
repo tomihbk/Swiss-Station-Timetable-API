@@ -1,4 +1,4 @@
-# CFF-SBB Departure Arrival API 
+# Swtizerland Open Transport Data - Departure and Arrival API 
 ## Installation
 
 Setup is very easy. First, clone the repository 
