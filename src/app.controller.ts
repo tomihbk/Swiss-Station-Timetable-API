@@ -11,4 +11,9 @@ export class AppController {
     this.logger.log('inside gethello function')
     return this.appService.getHello();
   }
+
+  @Get('ping')
+  sendPing(): string{
+    return "Pong"
+  }
 }
