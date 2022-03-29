@@ -12,7 +12,7 @@ export class HealthController {
   @HealthCheck()
   check() {
     return this.health.check([
-      () => this.http.pingCheck('transport-api', `https://transport-api.co.uk/${process.env.API_VERSION}/health`),() => this.http.pingCheck('swiss-transport-website', 'https://swiss-station-timetable.vercel.app/')
+      () => this.http.pingCheck('transport-api', `https://transport-api.co.uk/${process.env.API_VERSION}/health`)
     ]);
   }
 }
