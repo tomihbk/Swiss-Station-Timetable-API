@@ -11,8 +11,6 @@ export class HealthController {
   @Get()
   @HealthCheck()
   check() {
-    return this.health.check([
-      () => this.http.pingCheck('transport-api', `https://transport-api.co.uk/${process.env.API_VERSION}/health`)
-    ]);
+    return this.health.check([]);
   }
 }
