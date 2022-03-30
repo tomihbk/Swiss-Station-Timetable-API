@@ -7,11 +7,9 @@ import { Transport } from './transport';
 import { TransportService } from './transport/transport.service';
 import { ConfigModule } from '@nestjs/config';
 import { TransportModule } from './transport/transport.module';
-import { TerminusModule } from '@nestjs/terminus';
-import { HealthController } from './health/health.controller';
 //process.env.NODE_ENV === 'development' ? 
 @Module({
-  imports: [TerminusModule ,LoggerModule.forRoot({
+  imports: [LoggerModule.forRoot({
     pinoHttp: {
       prettyPrint: {
         colorize: true,
@@ -19,7 +17,7 @@ import { HealthController } from './health/health.controller';
       }
     }
   }), ConfigModule.forRoot(), TransportModule],
-  controllers: [AppController, TransportController, HealthController],
+  controllers: [AppController, TransportController],
   providers: [AppService, Transport, TransportService],
 })
 
