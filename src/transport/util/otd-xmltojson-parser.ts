@@ -90,13 +90,14 @@ export class XmlToJsonResponse {
                             "EstimatedTime": !this.isItDeparture && this.arrivalEstimatedAvailable ? CallAtStop["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
                         },
                         "PlannedPlatform": CallAtStop.hasOwnProperty("ojp:PlannedQuay") ? CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._ : undefined,
+                        "EstimatedPlatform": CallAtStop.hasOwnProperty("ojp:EstimatedQuay") ? CallAtStop["ojp:EstimatedQuay"][0]["ojp:Text"][0]._ : undefined,
                         "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
                         "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0],
                         "TransportMethod": {
                             "PtMode": StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0],
                             "SubMode": StopEventService[0]["ojp:Mode"][0][transportSubMode][0],
                             "TransportName": StopEventService[0]["ojp:Mode"][0]["ojp:Name"][0]["ojp:Text"][0]._,
-                            "TransportShortName": StopEventService[0]["ojp:Mode"][0]["ojp:ShortName"][0]["ojp:Text"][0]._
+                            "TransportShortName": StopEventService[0]["ojp:Mode"][0].hasOwnProperty("ojp:ShortName") && StopEventService[0]["ojp:Mode"][0]["ojp:ShortName"][0]["ojp:Text"][0]._
                         }
                     },
                     "Origin": {
