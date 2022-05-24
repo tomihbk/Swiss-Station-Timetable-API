@@ -24,6 +24,8 @@ export class OTDXmlBody {
         // https://opentransportdata.swiss/en/dataset/bav_liste
         serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Location'][0]['ojp:PlaceRef'][0]['ojp:StopPlaceRef'][0] = this.body.StopPlaceReference
 
+        serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Location'][0]['ojp:PlaceRef'][0]['ojp:LocationName'][0]['ojp:Text'][0] = "placeholder"
+
         // Sets the Depature or Arrival time for the requested station
         serviceRequest['ojp:OJPStopEventRequest'][0]['ojp:Location'][0]['ojp:DepArrTime'][0] = this.body.ArrivalOrDepatureTime
 
