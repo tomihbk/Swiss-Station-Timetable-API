@@ -26,6 +26,9 @@ export class XmlToJsonResponse {
             this.convertedResponseXmlToJson = res
         })
 
+        //console.log(JSON.stringify(this.convertedResponseXmlToJson))
+        //return
+
         const StopEventResponseContextLocation = this.convertedResponseXmlToJson["siri:OJP"]["siri:OJPResponse"][0]["siri:ServiceDelivery"][0]["ojp:OJPStopEventDelivery"][0]["ojp:StopEventResponseContext"][0]["ojp:Places"][0]["ojp:Location"][0]
 
         const StopEventResults = this.convertedResponseXmlToJson["siri:OJP"]["siri:OJPResponse"][0]["siri:ServiceDelivery"][0]["ojp:OJPStopEventDelivery"][0]["ojp:StopEventResult"]
@@ -69,8 +72,8 @@ export class XmlToJsonResponse {
                                 StopEventResponseContextLocation["ojp:StopPoint"][0]["siri:StopPointRef"][0] :
                                 StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceRef"][0],
                             "name": StopEventResponseContextLocation.hasOwnProperty("ojp:StopPoint") ?
-                                StopEventResponseContextLocation["ojp:StopPoint"][0]["ojp:StopPointName"][0]["ojp:Text"][0] :
-                                StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceName"][0]["ojp:Text"][0],
+                                StopEventResponseContextLocation["ojp:StopPoint"][0]["ojp:StopPointName"][0]["ojp:Text"][0]._ :
+                                StopEventResponseContextLocation["ojp:StopPlace"][0]["ojp:StopPlaceName"][0]["ojp:Text"][0]._,
                             "GeoLocation": {
                                 "latitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Latitude"][0],
                                 "longitude": StopEventResponseContextLocation["ojp:GeoPosition"][0]["siri:Longitude"][0]
@@ -80,7 +83,7 @@ export class XmlToJsonResponse {
                     },
                     "RequestedStation": {
                         "StartPointRef": CallAtStop["siri:StopPointRef"][0],
-                        "StartPoint": CallAtStop["ojp:StopPointName"][0]["ojp:Text"][0],
+                        "StartPoint": CallAtStop["ojp:StopPointName"][0]["ojp:Text"][0]._,
                         "ServiceDeparture": {
                             "TimetabledTime": this.isItDeparture ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:TimetabledTime"][0] : undefined,
                             "EstimatedTime": this.isItDeparture && this.depatureEstimatedAvailable ? CallAtStop["ojp:ServiceDeparture"][0]["ojp:EstimatedTime"][0] : undefined
@@ -92,7 +95,7 @@ export class XmlToJsonResponse {
                         "PlannedPlatform": CallAtStop.hasOwnProperty("ojp:PlannedQuay") ? CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._ : undefined,
                         "EstimatedPlatform": CallAtStop.hasOwnProperty("ojp:EstimatedQuay") ? CallAtStop["ojp:EstimatedQuay"][0]["ojp:Text"][0]._ : undefined,
                         "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
-                        "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0],
+                        "PublishedLineName": StopEventService[0]["ojp:PublishedLineName"][0]["ojp:Text"][0]._,
                         "TransportMethod": {
                             "PtMode": StopEventService[0]["ojp:Mode"][0]["ojp:PtMode"][0],
                             "SubMode": StopEventService[0]["ojp:Mode"][0][transportSubMode][0],
@@ -103,7 +106,7 @@ export class XmlToJsonResponse {
                     "Origin": {
                         "IsAvailable": val["ojp:StopEvent"][0].hasOwnProperty("ojp:PreviousCall"),
                         "PointRef": PreviousCall ? PreviousCall["siri:StopPointRef"][0] : undefined,
-                        "PointName": PreviousCall ? PreviousCall["ojp:StopPointName"][0]["ojp:Text"][0] : undefined,
+                        "PointName": PreviousCall ? PreviousCall["ojp:StopPointName"][0]["ojp:Text"][0]._ : undefined,
                         "ServiceDeparture": {
                             "TimetabledTime": PreviousCall && PreviousCall.hasOwnProperty("ojp:ServiceDeparture") ? PreviousCall["ojp:ServiceDeparture"][0]["ojp:TimetabledTime"][0] : undefined,
                             "EstimatedTime": this.originPreviousDepatureEstimatedAvailable ? PreviousCall["ojp:ServiceDeparture"][0]["ojp:EstimatedTime"][0] : undefined
