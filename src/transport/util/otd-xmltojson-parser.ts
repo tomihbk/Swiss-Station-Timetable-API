@@ -26,9 +26,6 @@ export class XmlToJsonResponse {
             this.convertedResponseXmlToJson = res
         })
 
-        //console.log(JSON.stringify(this.convertedResponseXmlToJson))
-        //return
-
         const StopEventResponseContextLocation = this.convertedResponseXmlToJson["siri:OJP"]["siri:OJPResponse"][0]["siri:ServiceDelivery"][0]["ojp:OJPStopEventDelivery"][0]["ojp:StopEventResponseContext"][0]["ojp:Places"][0]["ojp:Location"][0]
 
         const StopEventResults = this.convertedResponseXmlToJson["siri:OJP"]["siri:OJPResponse"][0]["siri:ServiceDelivery"][0]["ojp:OJPStopEventDelivery"][0]["ojp:StopEventResult"]
@@ -50,6 +47,9 @@ export class XmlToJsonResponse {
                 this.depatureEstimatedAvailable = CallAtStop.hasOwnProperty("ojp:ServiceDeparture") && CallAtStop["ojp:ServiceDeparture"][0].hasOwnProperty("ojp:EstimatedTime")
 
                 this.arrivalEstimatedAvailable = CallAtStop.hasOwnProperty("ojp:ServiceArrival") && CallAtStop["ojp:ServiceArrival"][0].hasOwnProperty("ojp:EstimatedTime")
+
+                //const tripCancelledv2 = StopEventService[0].hasOwnProperty("ojp:Cancelled") && StopEventService[0]["ojp:Cancelled"][0]
+                const tripCancelled = CallAtStop.hasOwnProperty("ojp:NotServicedStop") && !!CallAtStop["ojp:NotServicedStop"][0]
 
                 this.originPreviousDepatureEstimatedAvailable = PreviousCall != undefined && PreviousCall.hasOwnProperty("ojp:ServiceDeparture") && PreviousCall["ojp:ServiceDeparture"][0].hasOwnProperty("ojp:EstimatedTime")
 
@@ -92,6 +92,7 @@ export class XmlToJsonResponse {
                             "TimetabledTime": !this.isItDeparture ? CallAtStop["ojp:ServiceArrival"][0]["ojp:TimetabledTime"][0] : undefined,
                             "EstimatedTime": !this.isItDeparture && this.arrivalEstimatedAvailable ? CallAtStop["ojp:ServiceArrival"][0]["ojp:EstimatedTime"][0] : undefined
                         },
+                        "IsTripCancelled": tripCancelled,
                         "PlannedPlatform": CallAtStop.hasOwnProperty("ojp:PlannedQuay") ? CallAtStop["ojp:PlannedQuay"][0]["ojp:Text"][0]._ : undefined,
                         "EstimatedPlatform": CallAtStop.hasOwnProperty("ojp:EstimatedQuay") ? CallAtStop["ojp:EstimatedQuay"][0]["ojp:Text"][0]._ : undefined,
                         "OperatingDay": StopEventService[0]["ojp:OperatingDayRef"][0],
