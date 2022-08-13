@@ -6,11 +6,9 @@ Setup is very easy. First, clone the repository
 ```shell script
 git clone https://github.com/tomihbk/cff-departure-arrival-dashboard-api.git
 cd cff-departure-arrival-dashboard-api
-npm install
 ```
 
-Create an ``.env`` file at the root of your project with the following.  
-
+Copy file `.env.dev` to `.env`
 
 ```dotenv
 OPEN_TRANSPORT_DATA_API_URL = https://api.opentransportdata.swiss/ojp2020
@@ -19,12 +17,15 @@ API_VERSION = API_VERSION(v1)
 APP_PORT = APP_PORT_FOR_DEVELOPMENT
 ```
 
-An example file `.env.example` is included.
-
-Your project is now ready. Start the project by
+Your project is now ready. Start the project with docker-compose :
 
 ```shell script
-nest start
+docker-compose up -d
+```
+
+Or on your local node environment :
+```sh
+npm install; npm run dev
 ```
 
 Your API path is ``http://localhost:APP_PORT/API_VERSION/transport``.
