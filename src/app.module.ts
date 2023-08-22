@@ -7,6 +7,8 @@ import { Transport } from './transport';
 import { TransportService } from './transport/transport.service';
 import { ConfigModule } from '@nestjs/config';
 import { TransportModule } from './transport/transport.module';
+import { StationsController } from './stations/stations.controller';
+import { StationsModule } from './stations/stations.module';
 //process.env.NODE_ENV === 'development' ? 
 @Module({
   imports: [LoggerModule.forRoot({
@@ -16,8 +18,8 @@ import { TransportModule } from './transport/transport.module';
         levelFirst: true
       }
     }
-  }), ConfigModule.forRoot(), TransportModule],
-  controllers: [AppController, TransportController],
+  }), ConfigModule.forRoot(), TransportModule, StationsModule],
+  controllers: [AppController, TransportController, StationsController],
   providers: [AppService, Transport, TransportService],
 })
 
