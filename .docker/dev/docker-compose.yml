@@ -1,0 +1,17 @@
+version: "3.6"
+services:
+  api:
+    container_name: "${APPLICATION_NAME}_api"
+    image: node:16
+    volumes:
+      - ../../.:/home/node/app
+    working_dir: /home/node/app
+    networks:
+      - sst_api_net
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+      - 12892:9229
+    command: '/bin/bash -c "npm install; npm run start:debug"'
+
+networks:
+  sst_api_net:
